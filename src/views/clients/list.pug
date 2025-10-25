@@ -1,10 +1,26 @@
 extends ../layout.pug
 
+
 block content
+  link(rel="stylesheet" href="/css/listados.css")
   h2 Clientes
   if clients.length
-    ul
-      each c in clients
-        li= c.name + ' (' + c.email + ')'
+    table
+      thead 
+        tr 
+          th Nombre 
+          th Email
+          th Teléfono
+
+      tbody
+        each client in clients
+          tr 
+            td= client.name
+            td= client.email
+            td= client.phone
+            td 
+              a.button(href=`/clients/edit/${client.id}`) Editar
+              a.button(href=`/clients/${client.id}`) Ver
+
   else
-    p (Sin clientes)
+    p No hay clientes registrados.
