@@ -1,27 +1,36 @@
 extends ../layout.pug
 
 block content
+  link(rel="stylesheet" href="/css/listados.css")
   h2 Tareas
-  p
-    a(href="/tasks/new") ➕ Nueva tarea
-
-  if currentDept
+  div
     p
-      | Mostrando tareas del área: 
-      strong= currentDept.name
+      a.button(href="/tasks/new") ➕ Nueva tarea
 
-  if tasks.length
-    table
-      thead
-        tr
-          th Título
-          th Estado
-          th Vence
-      tbody
-        each t in tasks
+    if currentDept
+      p
+        | Mostrando tareas del área: 
+        strong= currentDept.name
+
+    if tasks.length
+      table.tasks-list
+        thead
           tr
-            td: a(href=`/tasks/${t.id}`)= t.title
-            td= t.status
-            td= t.dueDate || '-'
-  else
-    p (No hay tareas)
+            th Título
+            th Estado
+            th Vence
+            th Acciones
+        tbody
+          each t in tasks
+            tr
+              td: a(href=`/tasks/${t.id}`)= t.title
+              td(class=`status-${t.status}`)= t.status.replace('_', ' ')
+
+              td= t.dueDate ? t.dueDate.slice(0,10) : '-' 
+              td
+                div.acciones-container
+                  a.button.small(href=`/tasks/${t.id}/edit`)  Editar
+                  form(method="POST", action=`/tasks/${t.id}/delete`, style="display:inline")
+                    button.button.small.danger(type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar esta tarea?');")  Eliminar
+    else
+      p (No hay tareas)

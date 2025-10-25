@@ -1,82 +1,86 @@
 extends ../layout.pug
 
-block content
+block content 
+  link(rel="stylesheet" href="/css/forms.css")
+
   if error
-    .card(style="background:#ffe6e6;padding:8px;margin-bottom:8px;color:#900")
+    .card(style="background:#ffe6e6;padding:12px;margin-bottom:16px;color:#900")
       strong Error: 
       |  #{error}
+
   if task
-    h2 Editar tarea
-    form(method="POST", action=`/tasks/${task.id}`)
-      .row
-        .card
-          label Título
-          input(type="text", name="title", required, value=task?task.title:'')
-        .card
-          label Descripción
-          textarea(name="description")= task?task.description:''
-      .row
-        .card
-          label Área
-          select(name="departmentId", required)
-            option(value="") -- Seleccionar --
-            each d in departments
-              if task && task.departmentId === d.id
-                option(value=d.id, selected)= d.name
-              else
-                option(value=d.id)= d.name
-        .card
-          label Asignado a
-          select(name="assigneeId", required)
-            option(value="") -- Seleccionar --
-            each u in users
-              if task && task.assigneeId === u.id
-                option(value=u.id, selected)= u.name
-              else
-                option(value=u.id)= u.name
-      .row
-        .card
-          label Fecha límite
-          input(type="date", name="dueDate", value=(task && task.dueDate ? task.dueDate.slice(0,10) : ''))
-        .card
-          label Estado
-          select(name="status")
-            - const statuses = ['pending','in_progress','blocked','done']
-            each s in statuses
-              if task.status === s
-                option(value=s, selected)= s
-              else
-                option(value=s)= s
-      .row
+    h2 Editar Tarea
+    form.task-form(method="POST", action=`/tasks/${task.id}`)
+
+      .field
+        label(for="title") Título
+        input(type="text" name="title" id="title", required, value=task?task.title:'')
+      .field.textarea-field
+        label(for="description") Descripción
+
+        textarea(name="description" )= task?task.description:'' 
+
+
+      .field
+        label(for="departmentId") Área
+        select(name="departmentId" id="departmentId", required)
+          option(value="") -- Seleccionar --
+          each d in departments
+            option(value=d.id, selected=(task && task.departmentId === d.id))= d.name
+
+      .field
+        label(for="assigneeId") Asignado a
+        select(name="assigneeId" id="assigneeId", required)
+          option(value="") -- Seleccionar --
+          each u in users 
+            option(value=u.id, selected=(task && task.assigneeId === u.id))= u.name
+
+
+
+      .field
+        label(for="dueDate") Fecha límite
+        input(type="date" name="dueDate" id="dueDate", value=(task && task.dueDate ? task.dueDate.toISOString().slice(0,10) : ''))
+      .field
+        label(for="status") Estado
+        select(name="status" id="status")
+          - const statuses = ['pending','in_progress','blocked','done']
+          each s in statuses
+            option(value=s, selected=(task && task.status === s))= s
+
+
+
+      .buttons
         button(type="submit") Guardar
-    form(method="POST", action=`/tasks/${task.id}/delete`, style="display:inline;margin-left:8px")
-      button(type="submit") Eliminar
-  else
-    h2 Nueva tarea
-    form(method="POST", action="/tasks")
-      .row
-        .card
-          label Título
-          input(type="text", name="title", required, value='')
-        .card
-          label Descripción
-          textarea(name="description")
-      .row
-        .card
-          label Área
-          select(name="departmentId", required)
-            option(value="") -- Seleccionar --
-            each d in departments
-              option(value=d.id)= d.name
-        .card
-          label Asignado a
-          select(name="assigneeId", required)
-            option(value="") -- Seleccionar --
-            each u in users
-              option(value=u.id)= u.name
-      .row
-        .card
-          label Fecha límite
-          input(type="date", name="dueDate", value='')
-      .row
+        form(method="POST", action=`/tasks/${task.id}/delete`, style="display:inline")
+          button(type="submit") Eliminar
+
+
+
+  h2 Nueva Tarea
+    form.task-form(method="POST" action="/tasks")
+      .field 
+        label(for="title") Título
+        input(type="text" name="title" id="title", required, value='')
+      .field
+        label(for="description") Descripción
+        textarea(name="description" id="description")
+
+      .field
+        label(for="departmentId") Área
+        select(name="departmentId" id="departmentId", required)
+          option(value="") -- Seleccionar --
+          each d in departments
+            option(value=d.id)= d.name
+      .field 
+        label(for="assigneeId") Asignado a
+        select(name="assigneeId" id="assigneeId", required)
+          option(value="") -- Seleccionar --
+          each u in users
+            option(value=u.id)= u.name
+
+      .field 
+        label(for="dueDate") Fecha límite
+        input(type="date" name="dueDate" id="dueDate" value=(task && task.dueDate ? task.dueDate.toISOString().slice(0,10): ''))
+
+      .buttons
         button(type="submit") Guardar
