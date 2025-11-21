@@ -1,0 +1,23 @@
+extends ../layout.pug
+
+block content
+  h2 Editar Cliente
+  form(method="POST", action=`/clients/${client._id}`)
+    input(type="hidden", name="_method", value="PUT")
+    .row
+      .card
+        label Nombre
+        input(type="text", name="name", required, value=client.name)
+      .card
+        label Email
+        input(type="email", name="email", required, value=client.email || '')
+      .card
+        label Teléfono
+        input(type="text", name="phone", value=client.phone || '')
+    div(style="display: flex; gap: 8px; margin-top: 16px;")
+      button(type="submit") Guardar cambios
+      a.btn.btn-secondary(href="/clients") Cancelar
+  form(method="POST", action=`/clients/${client._id}`, style="margin-top: 16px;")
+    input(type="hidden", name="_method", value="DELETE")
+    button.btn.btn-secondary(type="submit", onclick="return confirm('¿Estás seguro de que deseas eliminar este cliente?');", style="background: linear-gradient(135deg, #ef4444, #dc2626); border: none; cursor: pointer; padding: 8px 16px;") 🗑️ Eliminar cliente
+

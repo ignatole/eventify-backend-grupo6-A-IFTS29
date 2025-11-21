@@ -14,6 +14,13 @@ export async function newForm(req, res) {
   res.render('clients/new');
 }
 
+export async function editForm(req, res) {
+  const { id } = req.params;
+  const client = await resolveClient(id);
+  if (!client) return res.status(404).render('error', { message: 'Cliente no encontrado' });
+  res.render('clients/edit', { client });
+}
+
 export async function create(req, res) {
   const { name, email, phone } = req.body;
   const client = new Client({ name, email, phone, createdAt: new Date() });
@@ -34,19 +41,19 @@ export async function clientsJSON(req, res) {
 export async function remove(req, res) {
   const { id } = req.params;
   const client = await resolveClient(id);
-  if (!client) return res.status(404).json({ success: false, message: 'Cliente no encontrado' });
+  if (!client) return res.status(404).render('error', { message: 'Cliente no encontrado' });
   await Client.deleteOne({ _id: client._id }).exec();
-  res.json({ success: true, message: 'Cliente eliminado correctamente', name: client.name });
+  res.redirect('/clients');
 }
 
 export async function update(req, res) {
   const { id } = req.params;
   const { name, email, phone } = req.body;
   const client = await resolveClient(id);
-  if (!client) return res.status(404).json({ success: false, message: 'Cliente no encontrado' });
+  if (!client) return res.status(404).render('error', { message: 'Cliente no encontrado' });
   client.name = name;
   client.email = email;
   client.phone = phone;
   await client.save();
-  res.json({ success: true, message: 'Cliente actualizado con éxito', client });
+  res.redirect('/clients');
 }

@@ -229,6 +229,53 @@ El middleware:
 - `npm run seed` - Pobla la base de datos con datos iniciales
 - `npm run lint` - Ejecuta el linter (configurar según necesidad)
 
+## 👥 Usuarios de Prueba
+
+Después de ejecutar `npm run seed`, puedes usar estos usuarios (la contraseña es el nombre del email sin el dominio):
+
+- `romina@eventify.com` / `romina`
+- `matias@eventify.com` / `matias`
+- `laura@eventify.com` / `laura`
+- `ivan@eventify.com` / `ivan`
+- `ignacio@eventify.com` / `ignacio`
+
+## 🚀 Despliegue en Render.com
+
+### Configuración en Render
+
+1. **Crear un nuevo Web Service** en Render (no Static Site)
+2. **Conectar tu repositorio** de GitHub
+3. **Configuración del servicio:**
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+   - **Environment**: `Node`
+   - **No configurar** un "Publish Directory" (este es un servicio web, no un sitio estático)
+
+### Variables de Entorno
+
+Configura las siguientes variables de entorno en Render:
+
+- `MONGODB_URI`: URI de tu base de datos MongoDB (ej: `mongodb://localhost:27017` o URI de MongoDB Atlas)
+- `DB_NAME`: Nombre de la base de datos (por defecto: `Eventify`)
+- `JWT_SECRET`: Clave secreta para JWT (genera una clave segura y aleatoria)
+- `PORT`: Render asigna el puerto automáticamente, pero puedes dejarlo en `3000` como respaldo
+- `NODE_ENV`: `production`
+
+### Notas para Despliegue
+
+- Render asigna automáticamente el puerto, y el código usa `process.env.PORT`
+- Asegúrate de tener MongoDB accesible desde Render (MongoDB Atlas es recomendado)
+- El archivo `render.yaml` en la raíz del proyecto contiene la configuración base
+- Después del despliegue, ejecuta `npm run seed` manualmente o desde la consola de Render para poblar datos iniciales
+
+### MongoDB Atlas (Recomendado)
+
+Si usas MongoDB Atlas, la URI debería verse así:
+
+```
+mongodb+srv://usuario:password@cluster.mongodb.net/Eventify?retryWrites=true&w=majority
+```
+
 ## 📄 Licencia
 
 Este proyecto es parte de un trabajo académico del grupo 6-A de IFTS29.

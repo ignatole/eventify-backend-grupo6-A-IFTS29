@@ -1,5 +1,6 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
+import methodOverride from 'method-override';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
@@ -51,15 +52,16 @@ app.set('view engine', 'pug');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(methodOverride('_method'));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // middleware
 app.use(logger);
 
-// Auth routes (públicas)
-app.use('/auth', authRouter);
-app.use('/api/auth', authRouter);
+// Auth routes (públicas) - protegidas con authLimiter
+app.use('/auth', authLimiter, authRouter);
+app.use('/api/auth', authLimiter, authRouter);
 
 // Rutas protegidas (requieren usuario autenticado)
 app.use(authenticate);

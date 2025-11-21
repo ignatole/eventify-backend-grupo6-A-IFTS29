@@ -7,7 +7,7 @@ block content
       |  #{error}
   if task
     h2 Editar tarea
-    form(method="POST", action=`/tasks/${task.id}`)
+    form#editTaskForm(method="POST", action=`/tasks/${task.id}`)
       .row
         .card
           label Título
@@ -48,13 +48,12 @@ block content
                 option(value=s, selected)= s
               else
                 option(value=s)= s
-      .row
-        .card
-          form(method="POST", action=`/tasks/${task.id}`)
-            button(type="submit", style="width:100%") Guardar
-        .card
-          form(method="POST", action=`/tasks/${task.id}/delete`)
-            button(type="submit", style="width:100%; background:#dc2626; border:0") Eliminar
+    .row
+      .card
+        button(type="submit", form="editTaskForm", style="width:100%") Guardar
+      .card
+        form(method="POST", action=`/tasks/${task.id}/delete`, style="margin:0;")
+          button(type="submit", style="width:100%; background:#dc2626; border:0; color:white; padding:8px; cursor:pointer;") Eliminar
   else
     h2 Nueva tarea
     form(method="POST", action="/tasks")

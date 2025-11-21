@@ -23,8 +23,12 @@ block content
               div(style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);")
                 span(style="opacity: 0.7; font-size: 0.9rem;") 📞 
                 span(style="opacity: 0.9;")= client.phone
-            div(style="margin-top: 16px; display: flex; gap: 8px;")
-              a.btn.btn-secondary(href=`/products?clientId=${client._id}` style="flex: 1; text-align: center; padding: 8px 12px; font-size: 0.9rem;") Ver productos
+            div(style="margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap;")
+              a.btn.btn-secondary(href=`/products?clientId=${client._id}` style="flex: 1; text-align: center; padding: 8px 12px; font-size: 0.9rem; min-width: 120px;") Ver productos
+              a.btn.btn-secondary(href=`/clients/${client._id}/edit` style="flex: 1; text-align: center; padding: 8px 12px; font-size: 0.9rem; min-width: 120px; background: linear-gradient(135deg, #3b82f6, #2563eb);") ✏️ Editar
+              form(method="POST", action=`/clients/${client._id}`, style="flex: 1; margin: 0; min-width: 120px;")
+                input(type="hidden", name="_method", value="DELETE")
+                button.btn.btn-secondary(type="submit", onclick="return confirm('¿Estás seguro de que deseas eliminar este cliente?');", style="width: 100%; padding: 8px 12px; font-size: 0.9rem; background: linear-gradient(135deg, #ef4444, #dc2626); border: none; cursor: pointer;") 🗑️ Eliminar
   else
     .card(style="text-align: center; padding: 48px 24px;")
       div(style="font-size: 3rem; margin-bottom: 16px; opacity: 0.5;") 👥
